@@ -1,0 +1,6 @@
+.github
+.gitignore
+.gitlab-ci.yml
+.idea
+venv
+.git

@@ -1,0 +1,27 @@
+version: "3.7"
+
+volumes:
+  postgres_data:
+
+services:
+  app:
+    container_name: postogram_app
+    build:
+      context: ./backend
+    depends_on:
+      - db
+    volumes:
+      - ./backend:/app
+    ports:
+      - 8012:8012
+    command: /start.sh
+    entrypoint: /entrypoint.sh
+    restart: on-failure
+    env_file: ./backend/.envs/.env
+
+  db:
+    container_name: postogram_db
+    image: postgres:15-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file: ./backend/.envs/.env.db
