@@ -1,15 +1,9 @@
 from django.db import models
 from django.conf import settings
-
+from src.apps.core.constants import RequestStatus
 
 
 class FriendRequest(models.Model):
-    REQUEST_STATUS_CHOICES = [
-        ("pending", "Pending"),
-        ("accepted", "Accepted"),
-        ("rejected", "Rejected"),
-    ]
-
     from_user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="sent_requests"
     )
@@ -20,7 +14,7 @@ class FriendRequest(models.Model):
     )
     
     status = models.CharField(
-        max_length=10, choices=REQUEST_STATUS_CHOICES, default="pending"
+        max_length=10, choices=RequestStatus.REQUEST_STATUS_CHOICES, default=RequestStatus.PENDING
     )
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -31,14 +25,14 @@ class FriendRequest(models.Model):
         return f"{self.from_user.username} -> {self.to_user.username} ({self.status})"
 
     def accept(self):
-        self.status = "accepted"
+        self.status = RequestStatus.ACCEPTED
         self.save()
         Friend.objects.create(user=self.from_user, friend=self.to_user)
         Friend.objects.create(user=self.to_user, friend=self.from_user)
         self.delete()
 
     def reject(self):
-        self.status = "rejected"
+        self.status = RequestStatus.REJECTED
         self.save()
 
 

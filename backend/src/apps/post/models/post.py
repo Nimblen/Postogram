@@ -1,22 +1,17 @@
 from django.db import models
 from django.contrib.auth.models import User
-
+from src.apps.core.constants import PostType
 
 
 
 class Post(models.Model):
-    post_types = (
-        ("image", "image"),
-        ("video", "video"),
-        ("story", "story"),
-    )
     name = models.CharField(max_length=100)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="posts")
     description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     published = models.BooleanField(default=False)
-    post_type = models.CharField(max_length=10, choices=post_types)
+    post_type = models.CharField(max_length=10, choices=PostType.CHOICES)
     hashtags = models.ManyToManyField('post.Hashtag', related_name="posts", blank=True)
 
     def __str__(self):

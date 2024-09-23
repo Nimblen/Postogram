@@ -3,8 +3,9 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 from django.db.models import Q
 
-from src.apps.user.serializers import FriendSerializer, FriendRequestSerializer
+from src.apps.core.constants import RequestStatus
 
+from src.apps.user.serializers import FriendSerializer, FriendRequestSerializer
 from src.apps.user.permissions import IsRequestOwner
 from src.apps.user.models import Friend, FriendRequest
 
@@ -33,7 +34,7 @@ class FriendRequestModelViewSet(viewsets.ModelViewSet):
         queryset = super().get_queryset()
         if not user.is_staff:
             queryset = queryset.filter(
-                Q(from_user=user) | Q(to_user=user) & Q(status="pending")
+                Q(from_user=user) | Q(to_user=user) & Q(status=RequestStatus.PENDING)
             )
         return queryset
 

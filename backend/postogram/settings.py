@@ -72,6 +72,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "drf_lib.middleware.ExceptionHandlerMiddleware",
 ]
 
 ROOT_URLCONF = "postogram.urls"
@@ -170,13 +171,13 @@ REST_FRAMEWORK = {
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
     "DEFAULT_PERMISSION_CLASSES": ("src.apps.core.permissions.IsAuthorOrReadOnly",),
-
+    "EXCEPTION_HANDLER": "drf_lib.errors.handler.custom_exception_handler",
     "DEFAULT_FILTER_BACKENDS": ("django_filters.rest_framework.DjangoFilterBackend",),
     "DATETIME_INPUT_FORMATS": ["%Y-%m-%d %H:%M"],
     "DATE_INPUT_FORMATS": ["%Y-%m-%d"],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 10,
-}
+} 
 
 
 SIMPLE_JWT = {
